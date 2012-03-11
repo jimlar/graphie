@@ -2,4 +2,4 @@
             :description "Small statistics server"
             :dependencies [[org.clojure/clojure "1.3.0"]
                            [noir "1.2.2"]]
-            :main graphie.server)
+            :main graphie.main)
