@@ -1,10 +1,17 @@
 (ns graphie.views.welcome
-  (:require [graphie.views.common :as common]
-            [noir.content.pages :as pages])
   (:use noir.core
         hiccup.core
         hiccup.page-helpers))
 
-(defpage "/welcome" []
-         (common/layout
+(defpartial layout [& content]
+  (html5
+    [:head
+     [:title "graphie"]
+     (include-css "/css/reset.css")]
+    [:body
+     [:div#wrapper
+      content]]))
+
+(defpage "/" {}
+         (layout
            [:p "Welcome to graphie"]))
