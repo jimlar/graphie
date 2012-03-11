@@ -1,6 +1,5 @@
 # graphie
 
-A website written in noir. 
 
 ## Usage
 
