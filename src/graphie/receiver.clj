@@ -1,6 +1,7 @@
 (ns
   graphie.receiver
-  (:require [graphie.sockets :as sockets]))
+  (:require [clojure.string :as string]
+            [graphie.sockets :as sockets]))
 
 
 (defn- receive-stream-data [in out]
@@ -11,9 +12,19 @@
       (println (str "Got sample for " name ", value: " value ", time: " time)))))
 
 (defn- receive-udp [packet]
-  (println (str "Got packet '" (String. (.getData packet) (.getOffset packet) (.getLength packet) "utf-8") "'")))
+  (println (str "Got packet '" packet "'")))
+
+(defn parse-int [v default]
+  (try
+    (Integer. v)
+    (catch NumberFormatException e
+      default)))
+
+(defn decode-packet [packet]
+  (let [parts (string/split packet #"[:\\|]")]
+    (if (= 3 (count parts))
+      {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2)}
+      nil)))
 
 (defn start [port]
-  (sockets/start-udp-server port receive-udp))
-
-
+  (sockets/start-udp-server port receive-udp sockets/udp-to-string))

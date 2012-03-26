@@ -2,17 +2,15 @@
   graphie.sockets
   (:import (java.net InetAddress ServerSocket Socket SocketException DatagramSocket DatagramPacket)
            (java.io IOException)
-           (java.util.concurrent Executors)))
+           (java.util.concurrent Executors Executor)))
 
-(defonce executor (Executors/newCachedThreadPool))
-
-(defn- execute [^Runnable f]
+(defn- execute [^Executor executor ^Runnable f]
   (.execute executor f))
 
 ;
 ; TCP server parts
 ;
-(defrecord tcp-server [socket clients])
+(defrecord tcp-server [executor socket clients])
 
 (defn- close [^Socket s]
   (when-not (.isClosed s)
@@ -21,10 +19,10 @@
       (.shutdownOutput)
       (.close))))
 
-(defn- accept [^Socket s clients f]
+(defn- accept [^Executor executor ^Socket s clients f]
   (let [ins (.getInputStream s)
         outs (.getOutputStream s)]
-    (execute #(do
+    (execute executor #(do
                   (dosync (commute clients conj s))
                   (try
                     (f ins outs)
@@ -32,35 +30,40 @@
                   (close s)
                   (dosync (commute clients disj s))))))
 
-(defn- create-tcp-server [f ^ServerSocket ss]
+(defn- create-tcp-server [f ^Executor executor ^ServerSocket ss]
   (let [clients (ref #{})]
-    (execute #(when-not (.isClosed ss)
+    (execute executor #(when-not (.isClosed ss)
                   (try
-                    (accept (.accept ss) clients f)
+                    (accept executor (.accept ss) clients f)
                     (catch SocketException e))
                   (recur)))
-    (tcp-server. ss clients)))
+    (tcp-server. executor ss clients)))
 
 (defn start-tcp-server [port f]
-    (create-tcp-server f (ServerSocket. port)))
+    (create-tcp-server f (Executors/newCachedThreadPool) (ServerSocket. port)))
 
 (defn stop-tcp-server [server]
   (doseq [s @(:clients server)]
     (close s))
   (dosync (ref-set (:clients server) #{}))
-  (.close ^ServerSocket (:socket server)))
+  (.close ^ServerSocket (:socket server))
+  (.shutdown (:executor server)))
 
 ;
 ; UDP parts
 ;
 
-(defn start-udp-server [port f]
-  (let [ds (DatagramSocket. port)]
-    (execute #(when-not (.isClosed ds)
+(defn udp-to-string [packet]
+  (String. (.getData packet) (.getOffset packet) (.getLength packet) "utf-8"))
+
+(defn start-udp-server [port f decode-packet]
+  (let [ds (DatagramSocket. port)
+        executor (Executors/newCachedThreadPool)]
+    (execute executor #(when-not (.isClosed ds)
                 (try
                   (let [dp (DatagramPacket. (byte-array 1024) 1024)]
                     (.receive ds dp)
-                    (f dp))
+                    (f (decode-packet dp)))
                     (catch IOException e))
                 (recur)))
-    (tcp-server. ds [])))
+    (tcp-server. executor ds [])))

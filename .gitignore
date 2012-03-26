@@ -6,3 +6,4 @@ pom.xml
 .idea
 
 graphie.iml
+.lein-failures
