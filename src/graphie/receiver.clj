@@ -4,9 +4,6 @@
             [graphie.udp :as udp]))
 
 
-(defn- receive [packet]
-  (println (str "Got packet '" packet "'")))
-
 (defn- parse-int [v default]
   (try
     (Integer. v)
@@ -22,5 +19,12 @@
       {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2)}
       nil)))
 
+(defn- receive [packet]
+  (let [message (decode-packet packet)]
+    (println (str "Got message 2'" message "'"))))
+
 (defn start [port]
   (udp/start-server port receive (partial udp/packet-to-string "utf-8")))
+
+(defn stop [server]
+  (udp/stop-server server))

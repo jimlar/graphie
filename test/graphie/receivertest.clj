@@ -27,4 +27,3 @@
 (fact "An empty message gives nil message"
   (decode-packet "") => nil)
 
-
