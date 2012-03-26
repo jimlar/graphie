@@ -20,10 +20,13 @@
       {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2)}
       nil)))
 
-(defn- receive [stats-engine packet]
+(defn receive [stats-engine packet]
   (let [message (decode-packet packet)]
-    (println (str "Got message '" message "', reporting to stats engine"))
-    (stats-engine message)))
+    (if (not (nil? message))
+      (do
+        (println "Sending message to engine " stats-engine " message: " message)
+        (stats-engine message)))
+    nil))
 
 (defn start [port stats-engine]
   (udp/start-server port (partial receive stats-engine) (partial udp/packet-to-string "utf-8")))
