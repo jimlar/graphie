@@ -3,8 +3,11 @@
   (:use graphie.receiver))
 
 
-(fact "A corect message should be properly parsed"
+(fact "A correct message should be properly parsed"
   (decode-packet "glork:320|ms") => {:name "glork", :value 320, :type "ms"})
+
+(fact "A message with a float value should give a nil message"
+  (decode-packet "glork:320.9|ms") => nil)
 
 (fact "A message with alpahs in the value should give a nil message"
   (decode-packet "glork:A20|ms") => nil)
