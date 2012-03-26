@@ -1,7 +1,7 @@
 (ns
   graphie.receiver
   (:require [clojure.string :as string]
-            [graphie.sockets :as sockets]))
+            [graphie.udp :as udp]))
 
 
 (defn- receive-stream-data [in out]
@@ -14,7 +14,7 @@
 (defn- receive-udp [packet]
   (println (str "Got packet '" packet "'")))
 
-(defn parse-int [v default]
+(defn- parse-int [v default]
   (try
     (Integer. v)
     (catch NumberFormatException e
@@ -30,4 +30,4 @@
       nil)))
 
 (defn start [port]
-  (sockets/start-udp-server port receive-udp sockets/udp-to-string))
+  (udp/start-server port receive-udp udp/packet-to-string))

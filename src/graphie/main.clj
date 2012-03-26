@@ -9,5 +9,4 @@
         port (Integer. (get (System/getenv) "PORT" "8080"))]
     (receiver/start 7890)
 ;    (noir/start port {:mode mode :ns 'graphie})
-    (println "Started")
-    ))
+    (println "Started")))
