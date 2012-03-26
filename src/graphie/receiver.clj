@@ -22,7 +22,10 @@
 
 (defn decode-packet [packet]
   (let [parts (string/split packet #"[:\\|]")]
-    (if (= 3 (count parts))
+    (if (and
+          (= 3 (count parts))
+          (not (string/blank? (parts 0)))
+          (not (nil? (parse-int (parts 1) nil))))
       {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2)}
       nil)))
 
