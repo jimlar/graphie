@@ -9,8 +9,8 @@
 (defn- execute [^ExecutorService executor ^Runnable f]
   (.execute executor f))
 
-(defn packet-to-string [packet]
-  (String. (.getData packet) (.getOffset packet) (.getLength packet) "utf-8"))
+(defn packet-to-string [encoding packet]
+  (String. (.getData packet) (.getOffset packet) (.getLength packet) encoding))
 
 (defn start-server [port f decode-f]
   (let [ds (DatagramSocket. port)

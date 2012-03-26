@@ -1,4 +1,4 @@
-(ns graphie.test.receiver
+(ns graphie.receivertest
   (:use midje.sweet)
   (:use graphie.receiver))
 
@@ -26,4 +26,5 @@
 
 (fact "An empty message gives nil message"
   (decode-packet "") => nil)
+
 

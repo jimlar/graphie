@@ -4,14 +4,7 @@
             [graphie.udp :as udp]))
 
 
-(defn- receive-stream-data [in out]
-  (let [reader (java.io.PushbackReader. (java.io.InputStreamReader. in "utf8"))]
-    (let [name (read reader)
-          value (read reader)
-          time (read reader)]
-      (println (str "Got sample for " name ", value: " value ", time: " time)))))
-
-(defn- receive-udp [packet]
+(defn- receive [packet]
   (println (str "Got packet '" packet "'")))
 
 (defn- parse-int [v default]
@@ -30,4 +23,4 @@
       nil)))
 
 (defn start [port]
-  (udp/start-server port receive-udp udp/packet-to-string))
+  (udp/start-server port receive (partial udp/packet-to-string "utf-8")))
