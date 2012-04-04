@@ -5,11 +5,14 @@
             [graphie.stats :as stats]))
 
 
-(defn- parse-int [v default]
+(defn parse-int [v default]
   (try
     (Integer. v)
     (catch NumberFormatException e
       default)))
+
+(defn time-stamp []
+  (System/nanoTime))
 
 (defn decode-packet [packet]
   (let [parts (string/split packet #"[:\\|]")]
@@ -17,7 +20,7 @@
           (= 3 (count parts))
           (not (string/blank? (parts 0)))
           (not (nil? (parse-int (parts 1) nil))))
-      {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2)}
+      {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2), :time (time-stamp)}
       nil)))
 
 (defn receive [stats-engine packet]
