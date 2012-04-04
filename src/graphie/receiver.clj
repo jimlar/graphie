@@ -23,9 +23,7 @@
 (defn receive [stats-engine packet]
   (let [message (decode-packet packet)]
     (if (not (nil? message))
-      (do
-        (println "Sending message to engine " stats-engine " message: " message)
-        (stats-engine message)))
+      (stats-engine message))
     nil))
 
 (defn start [port stats-engine]
