@@ -5,10 +5,7 @@ $(function () {
         xaxis: { tickDecimals: 0, tickSize: 1 }
     };
 
-    var iteration = 0;
     function fetchData() {
-        ++iteration;
-
         function onDataReceived(series) {
             var data = series;
             $.plot($("#placeholder"), data, options);
@@ -21,9 +18,7 @@ $(function () {
             success: onDataReceived
         });
 
-        if (iteration < 5) {
-            setTimeout(fetchData, 500);
-        }
+        setTimeout(fetchData, 500);
     }
     fetchData();
 });
