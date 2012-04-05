@@ -3,6 +3,15 @@
 
 (defonce stats-agent (agent {}))
 
+(defn names []
+  (keys @stats-agent))
+
+(defn- second-to-point [second]
+  [(:s second) (/ (reduce + (:v second)) (count (:v second)))])
+
+(defn values [name]
+  (map second-to-point (:secs (name @stats-agent))))
+
 (defn seconds-from-millis [millis]
   (long (Math/floor (/ millis 1000))))
 
