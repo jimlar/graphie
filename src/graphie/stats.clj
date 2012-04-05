@@ -17,10 +17,13 @@
 (defn- add-value [message key-stats]
   (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
 
+(defn- different-second? [message key-stats]
+  (not (= (:s key-stats) (seconds-from-nanos (:time message)))))
+
 (defn- merge-stats [message key-stats]
-  (if (= (:s key-stats) (seconds-from-nanos (:time message)))
-    (add-value message key-stats)
-    (start-new-second message key-stats)))
+  (if (different-second? message key-stats)
+    (start-new-second message key-stats)
+    (add-value message key-stats)))
 
 (defn merge-time-message [data message]
   (let [key (keyword (:name message))
@@ -31,4 +34,3 @@
   (if (= "ms" (:type message))
     (send stats-agent merge-time-message message)
     (throw (IllegalArgumentException. (str "Unsupported message type: " (:type message))))))
-
