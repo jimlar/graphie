@@ -3,8 +3,8 @@
 
 (defonce stats-agent (agent {}))
 
-(defn seconds-from-nanos [nanos]
-  (long (Math/floor (/ nanos 1000000000))))
+(defn seconds-from-millis [millis]
+  (long (Math/floor (/ millis 1000))))
 
 (defn- start-new-second
   [message key-stats]
@@ -12,13 +12,13 @@
       (if (contains? key-stats :in)
         (assoc key-stats :secs (conj (get key-stats :secs []) {:v (:in key-stats) :s (:s key-stats)}))
         {})
-      {:in [(:value message)], :s (seconds-from-nanos (:time message))}))
+      {:in [(:value message)], :s (seconds-from-millis (:time message))}))
 
 (defn- add-value [message key-stats]
   (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
 
 (defn- different-second? [message key-stats]
-  (not (= (:s key-stats) (seconds-from-nanos (:time message)))))
+  (not (= (:s key-stats) (seconds-from-millis (:time message)))))
 
 (defn- merge-stats [message key-stats]
   (if (different-second? message key-stats)

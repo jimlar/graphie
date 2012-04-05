@@ -12,7 +12,7 @@
       default)))
 
 (defn time-stamp []
-  (System/nanoTime))
+  (System/currentTimeMillis))
 
 (defn decode-packet [packet]
   (let [parts (string/split packet #"[:\\|]")]
