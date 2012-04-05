@@ -9,6 +9,6 @@
   (let [mode (keyword (or (first m) :dev))
         port (Integer. (get (System/getenv) "PORT" "8080"))
         receiver (receiver/start 7890 stats/record-stats)]
-;    (noir/start port {:mode mode :ns 'graphie})
+    (noir/start port {:mode mode :ns 'graphie})
     (println "Started")
     receiver))

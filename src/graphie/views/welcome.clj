@@ -1,4 +1,6 @@
 (ns graphie.views.welcome
+  (:require
+    [graphie.stats :as stats])
   (:use noir.core
         hiccup.core
         hiccup.page-helpers))
@@ -14,4 +16,6 @@
 
 (defpage "/" {}
          (layout
-           [:p "Welcome to graphie"]))
+           [:h1 "Welcome to graphie"]
+           [:h2 "Current data"]
+           [:pre (str @stats/stats-agent)]))
