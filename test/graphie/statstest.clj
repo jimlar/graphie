@@ -33,3 +33,9 @@
     {:request_time {:in [320 456], :s 0}}
     {:name "request_time" :value 640 :type "ms", :time 2000000000})
   => {:request_time {:in [640] :s 2 :secs [{:v [320 456], :s 0}]}})
+
+(fact "A new value for a third  second starts adds to the seconds list"
+  (merge-time-message
+    {:request_time {:in [640] :s 2 :secs [{:v [320 456], :s 0}]}}
+    {:name "request_time" :value 720 :type "ms", :time 3000000000})
+  => {:request_time {:in [720] :s 3 :secs [{:v [320 456], :s 0} {:v [640], :s 2}]}})
