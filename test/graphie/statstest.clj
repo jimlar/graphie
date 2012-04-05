@@ -11,25 +11,25 @@
   => 2)
 
 (fact "First timing message gets inserted"
-  (process-timing-message
+  (merge-time-message
     {}
     {:name "request_time" :value 320 :type "ms", :time 123456})
   => {:request_time {:in [320], :s 0}})
 
 (fact "A second timing message gets added"
-  (process-timing-message
+  (merge-time-message
     {:request_time {:in [320], :s 0}}
     {:name "request_time" :value 640 :type "ms", :time 123457})
   => {:request_time {:in [320 640], :s 0}})
 
 (fact "A different metric gets a new key"
-  (process-timing-message
+  (merge-time-message
     {:request_time {:in [320], :s 0}}
     {:name "response_time" :value 640 :type "ms", :time 123458})
   => {:request_time {:in [320], :s 0} :response_time {:in [640], :s 0}})
 
-(fact "Sending a new value for another second starts new value list"
-  (process-timing-message
-    {:request_time {:in [320], :s 0}}
+(fact "A new value for another second starts new value list and summarizes the previous second"
+  (merge-time-message
+    {:request_time {:in [320 456], :s 0}}
     {:name "request_time" :value 640 :type "ms", :time 2000000000})
-  => {:request_time {:in [640] :s 2}})
+  => {:request_time {:in [640] :s 2 :secs [{:v [320 456], :s 0}]}})
