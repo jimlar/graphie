@@ -27,3 +27,8 @@
 (defn stop-server [^udp-server server]
   (.close (:socket server))
   (.shutdown (:executor server)))
+
+(defn udp-send [host port bytes]
+  (let [socket (DatagramSocket.)]
+    (.send socket (DatagramPacket. bytes (count bytes) (InetAddress/getByName host) port))
+    (.close socket)))
