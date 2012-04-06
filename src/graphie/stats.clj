@@ -2,7 +2,7 @@
   graphie.stats
   (:require [clojure.contrib.math :as math]))
 
-(defonce stats-agent (agent {}))
+(defonce ^:private stats-agent (agent {}))
 
 (defn seconds-from-millis [millis]
   (long (Math/floor (/ millis 1000))))

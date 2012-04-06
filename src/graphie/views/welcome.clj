@@ -20,8 +20,7 @@
   (layout
     [:h1 "Welcome to graphie"]
     [:h2 "Current data"]
-    [:div#placeholder {:style "width:600px;height:300px;"}]
-    [:pre (str @stats/stats-agent)]))
+    [:div#placeholder {:style "width:600px;height:300px;"}]))
 
 (defn data-set [name]
   {:label (str name) :data (stats/values name)})
