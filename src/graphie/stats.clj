@@ -4,17 +4,21 @@
 
 (defonce stats-agent (agent {}))
 
+(defn seconds-from-millis [millis]
+  (long (Math/floor (/ millis 1000))))
+
 (defn names []
   (keys @stats-agent))
 
 (defn- second-to-point [second]
-  [(:s second) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
+  [(* (:s second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
+
+(defn- include-values [second]
+  (< (- (seconds-from-millis (System/currentTimeMillis)) 60) (:s second))
+  true)
 
 (defn values [name]
-  (map second-to-point (:secs (name @stats-agent))))
-
-(defn seconds-from-millis [millis]
-  (long (Math/floor (/ millis 1000))))
+  (map second-to-point (filter include-values (:secs (name @stats-agent)))))
 
 (defn- start-new-second
   [message key-stats]

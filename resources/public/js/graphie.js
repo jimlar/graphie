@@ -1,8 +1,18 @@
 $(function () {
     var options = {
-        lines: { show: true },
-        points: { show: true },
-        xaxis: { tickDecimals: 0, tickSize: 1 }
+        lines: {
+            show: true,
+            lineWidth: 2,
+            align: "center"
+        },
+        points: { show: false },
+        xaxis: {
+            mode: "time",
+            timeformat: "%H:%M %y-%0m-%0d"
+        },
+        grid: {
+            hoverable: true
+        }
     };
 
     function fetchData() {
@@ -18,7 +28,7 @@ $(function () {
             success: onDataReceived
         });
 
-        setTimeout(fetchData, 500);
+        setTimeout(fetchData, 2000);
     }
     fetchData();
 });
