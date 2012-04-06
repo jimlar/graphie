@@ -1,5 +1,6 @@
 (ns
-  graphie.stats)
+  graphie.stats
+  (:require [clojure.contrib.math :as math]))
 
 (defonce stats-agent (agent {}))
 
@@ -7,7 +8,7 @@
   (keys @stats-agent))
 
 (defn- second-to-point [second]
-  [(:s second) (/ (reduce + (:v second)) (count (:v second)))])
+  [(:s second) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
 
 (defn values [name]
   (map second-to-point (:secs (name @stats-agent))))
