@@ -20,7 +20,7 @@
 (defn values [name]
   (map second-to-point (filter include-values (:secs (name @stats-agent)))))
 
-(defn- start-new-second
+(defn- finish-second
   [message key-stats]
     (merge
       (if (contains? key-stats :in)
@@ -36,7 +36,7 @@
 
 (defn- merge-stats [message key-stats]
   (if (different-second? message key-stats)
-    (start-new-second message key-stats)
+    (finish-second message key-stats)
     (add-value message key-stats)))
 
 (defn merge-time-message [data message]
