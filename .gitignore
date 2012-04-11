@@ -1,9 +1,10 @@
-pom.xml
-*jar
+/pom.xml
+/*jar
 /lib/
 /classes/
-.lein-deps-sum
-.idea
+/.lein-deps-sum
+/.idea
 
-graphie.iml
-.lein-failures
+/graphie.iml
+/.lein-failures
+/.lein-plugins/

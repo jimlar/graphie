@@ -7,4 +7,5 @@
                                [lein-midje "[1.0.9]"]
                                [com.stuartsierra/lazytest "1.2.3"]]
             :repositories {"stuartsierra-releases" "http://stuartsierra.com/maven2"}
+	    :plugins [[lein-swank "1.4.4"]]
             :main graphie.main)
