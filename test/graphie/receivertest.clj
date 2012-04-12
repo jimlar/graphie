@@ -1,12 +1,13 @@
 (ns graphie.receivertest
   (:use midje.sweet)
-  (:use graphie.receiver))
+  (:use graphie.receiver)
+  (:require [graphie.time :as time]))
 
 
 (fact "A correct message should be properly parsed"
   (decode-packet "request_time:320|v") => {:name "request_time", :value 320, :type "v", :time 123456}
   (provided
-    (time-stamp) => 123456))
+    (time/stamp) => 123456))
 
 (fact "A message with a float value should give a nil message"
   (decode-packet "request_time:320.9|v")
@@ -47,6 +48,6 @@
   (receive dummy-stats-engine "request_time:320|v")
   => nil
   (provided
-    (time-stamp) => 123456
+    (time/stamp) => 123456
     (dummy-stats-engine {:name "request_time", :value 320, :type "v", :time 123456}) => nil))
 

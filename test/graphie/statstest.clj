@@ -2,14 +2,6 @@
   (:use midje.sweet)
   (:use graphie.stats))
 
-(fact "123 is second 0"
-  (seconds-from-millis 123)
-  => 0)
-
-(fact "2000 is second 2"
-  (seconds-from-millis 2000)
-  => 2)
-
 (fact "First timing message gets inserted"
   (merge-time-message
     {}

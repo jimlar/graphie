@@ -2,6 +2,7 @@
   graphie.receiver
   (:require [clojure.string :as string]
             [graphie.udp :as udp]
+            [graphie.time :as time]
             [graphie.stats :as stats]))
 
 
@@ -11,16 +12,13 @@
     (catch NumberFormatException e
       default)))
 
-(defn time-stamp []
-  (System/currentTimeMillis))
-
 (defn decode-packet [packet]
   (let [parts (string/split packet #"[:\\|]")]
     (if (and
           (= 3 (count parts))
           (not (string/blank? (parts 0)))
           (not (nil? (parse-int (parts 1) nil))))
-      {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2), :time (time-stamp)}
+      {:name (parts 0), :value (parse-int (parts 1) nil), :type (parts 2), :time (time/stamp)}
       nil)))
 
 (defn receive [stats-engine packet]

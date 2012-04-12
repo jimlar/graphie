@@ -1,11 +1,9 @@
 (ns
   graphie.stats
-  (:require [clojure.contrib.math :as math]))
+  (:require [graphie.time :as time]
+            [clojure.contrib.math :as math]))
 
 (defonce ^:private stats-agent (agent {}))
-
-(defn seconds-from-millis [millis]
-  (long (Math/floor (/ millis 1000))))
 
 (defn names []
   (keys @stats-agent))
@@ -14,7 +12,7 @@
   [(* (:second second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
 
 (defn- include-values [second]
-  (< (- (seconds-from-millis (System/currentTimeMillis)) 60) (:second second))
+  (< (- (time/as-seconds (System/currentTimeMillis)) 60) (:second second))
   true)
 
 (defn values [name]
@@ -26,13 +24,13 @@
       (if (contains? key-stats :in)
         (assoc key-stats :secs (conj (get key-stats :secs []) {:v (:in key-stats) :second (:second key-stats)}))
         {})
-      {:in [(:value message)], :second (seconds-from-millis (:time message))}))
+      {:in [(:value message)], :second (time/as-seconds (:time message))}))
 
 (defn- add-value [message key-stats]
   (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
 
 (defn- different-second? [message key-stats]
-  (not (= (:second key-stats) (seconds-from-millis (:time message)))))
+  (not (= (:second key-stats) (time/as-seconds (:time message)))))
 
 (defn- merge-stats [message key-stats]
   (if (different-second? message key-stats)
