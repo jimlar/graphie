@@ -11,10 +11,10 @@
   (keys @stats-agent))
 
 (defn- second-to-point [second]
-  [(* (:s second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
+  [(* (:second second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
 
 (defn- include-values [second]
-  (< (- (seconds-from-millis (System/currentTimeMillis)) 60) (:s second))
+  (< (- (seconds-from-millis (System/currentTimeMillis)) 60) (:second second))
   true)
 
 (defn values [name]
@@ -24,15 +24,15 @@
   [message key-stats]
     (merge
       (if (contains? key-stats :in)
-        (assoc key-stats :secs (conj (get key-stats :secs []) {:v (:in key-stats) :s (:s key-stats)}))
+        (assoc key-stats :secs (conj (get key-stats :secs []) {:v (:in key-stats) :second (:second key-stats)}))
         {})
-      {:in [(:value message)], :s (seconds-from-millis (:time message))}))
+      {:in [(:value message)], :second (seconds-from-millis (:time message))}))
 
 (defn- add-value [message key-stats]
   (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
 
 (defn- different-second? [message key-stats]
-  (not (= (:s key-stats) (seconds-from-millis (:time message)))))
+  (not (= (:second key-stats) (seconds-from-millis (:time message)))))
 
 (defn- merge-stats [message key-stats]
   (if (different-second? message key-stats)
