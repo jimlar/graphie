@@ -37,12 +37,12 @@
     (finish-second message key-stats)
     (add-value message key-stats)))
 
-(defn merge-time-message [data message]
+(defn merge-value-message [data message]
   (let [key (keyword (:name message))
         key-stats (key data {})]
     (assoc data key (merge-stats message key-stats))))
 
 (defn record-stats [message]
   (if (= "v" (:type message))
-    (send stats-agent merge-time-message message)
+    (send stats-agent merge-value-message message)
     (throw (IllegalArgumentException. (str "Unsupported message type: " (:type message))))))
