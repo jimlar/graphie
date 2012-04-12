@@ -5,18 +5,14 @@
 
 (defonce ^:private stats-agent (agent {}))
 
-(defn names []
-  (keys @stats-agent))
-
 (defn- second-to-point [second]
   [(* (:second second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
 
-(defn- include-values [second]
-  (< (- (time/as-seconds (System/currentTimeMillis)) 60) (:second second))
-  true)
+(defn names []
+  (keys @stats-agent))
 
 (defn values [name]
-  (map second-to-point (filter include-values (:secs (name @stats-agent)))))
+  (map second-to-point (:secs (name @stats-agent))))
 
 (defn- finish-second
   [message key-stats]
@@ -29,20 +25,18 @@
 (defn- add-value [message key-stats]
   (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
 
-(defn- different-second? [message key-stats]
-  (not (= (:second key-stats) (time/as-seconds (:time message)))))
+(defn- same-second? [message key-stats]
+  (= (:second key-stats) (time/as-seconds (:time message))))
 
-(defn- merge-stats [message key-stats]
-  (if (different-second? message key-stats)
-    (finish-second message key-stats)
-    (add-value message key-stats)))
-
-(defn merge-value-message [data message]
+(defn add-value-message [data message]
   (let [key (keyword (:name message))
         key-stats (key data {})]
-    (assoc data key (merge-stats message key-stats))))
+    (assoc data key
+      (if (same-second? message key-stats)
+        (add-value message key-stats)
+        (finish-second message key-stats)))))
 
 (defn record-stats [message]
   (if (= "v" (:type message))
-    (send stats-agent merge-value-message message)
+    (send stats-agent add-value-message message)
     (throw (IllegalArgumentException. (str "Unsupported message type: " (:type message))))))
