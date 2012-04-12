@@ -25,6 +25,7 @@ The string should be encoded with UTF-8.
 * Calculate sum, max, min, avg, #samples (median?) for every second
 * Storage (MongoDB or some circular buffer thing)
 * Graph configuration parts
+* Drop the message type?
 
 ## License
 
