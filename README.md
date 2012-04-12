@@ -15,7 +15,7 @@ Goto http://localhost:8080/
 
 ### Open a connection to the UDP socket (ie. port 7890) and send messages on this format:
 ```
-metric_name:123|ms
+metric_name:123|v
 ```
 The string should be encoded with UTF-8.
 

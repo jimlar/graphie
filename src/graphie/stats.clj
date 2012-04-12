@@ -45,6 +45,6 @@
     (assoc data key (merge-stats message key-stats))))
 
 (defn record-stats [message]
-  (if (= "ms" (:type message))
+  (if (= "v" (:type message))
     (send stats-agent merge-time-message message)
     (throw (IllegalArgumentException. (str "Unsupported message type: " (:type message))))))

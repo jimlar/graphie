@@ -6,4 +6,4 @@
     (for [i (range 100)]
       (do
         (Thread/sleep 300)
-        (udp/udp-send "localhost" 7890 (.getBytes (str "response_time:" (.nextInt rnd 100) "0|ms") "utf8"))))))
+        (udp/udp-send "localhost" 7890 (.getBytes (str "response_time:" (.nextInt rnd 100) "0|v") "utf8"))))))
