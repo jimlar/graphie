@@ -14,29 +14,29 @@
 (defn values [name]
   (map second-to-point (:secs (name @stats-agent))))
 
-(defn- finish-second
-  [message key-stats]
-    (merge
-      (if (contains? key-stats :in)
-        (assoc key-stats :secs (conj (get key-stats :secs []) {:v (:in key-stats) :second (:second key-stats)}))
-        {})
-      {:in [(:value message)], :second (time/as-seconds (:time message))}))
+(defn- finish-second [stats value time]
+  (merge
+    (if (contains? stats :in)
+      (assoc stats :secs (conj (get stats :secs []) {:v (:in stats) :second (:second stats)}))
+      {})
+    {:in [value], :second (time/as-seconds time)}))
 
-(defn- add-value [message key-stats]
-  (assoc key-stats :in (conj (get key-stats :in []) (:value message))))
+(defn- add-value [stats value]
+  (assoc stats :in (conj (get stats :in []) value)))
 
-(defn- same-second? [message key-stats]
-  (= (:second key-stats) (time/as-seconds (:time message))))
+(defn- same-second? [message stats]
+  (= (:second stats) (time/as-seconds (:time message))))
 
 (defn add-value-message [data message]
   (let [key (keyword (:name message))
-        key-stats (key data {})]
+        stats (key data {})]
     (assoc data key
-      (if (same-second? message key-stats)
-        (add-value message key-stats)
-        (finish-second message key-stats)))))
+      (if (same-second? message stats)
+        (add-value stats (:value message))
+        (finish-second stats (:value message) (:time message))))))
 
 (defn record-stats [message]
   (if (= "v" (:type message))
     (send stats-agent add-value-message message)
     (throw (IllegalArgumentException. (str "Unsupported message type: " (:type message))))))
+
