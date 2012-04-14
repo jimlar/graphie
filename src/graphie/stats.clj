@@ -5,14 +5,11 @@
 
 (defonce ^:private stats-agent (agent {}))
 
-(defn- second-to-point [second]
-  [(* (:second second) 1000) (long (math/round (/ (reduce + (:v second)) (count (:v second)))))])
-
 (defn names []
   (keys @stats-agent))
 
-(defn values [name]
-  (map second-to-point (:secs (name @stats-agent))))
+(defn seconds [name]
+  (:secs (name @stats-agent)))
 
 (defn- second-summary [values second]
   (let [sum (reduce + values)]
