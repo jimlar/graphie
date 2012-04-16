@@ -21,7 +21,7 @@
   (layout
     [:h1 "Welcome to graphie"]
     [:h2 "Current data"]
-    [:div#placeholder {:style "width:600px;height:300px;"}]))
+    [:div#placeholder {:style "width:1024px;height:600px;"}]))
 
 (defn- point-for-key [key second]
   [(* (:second second) 1000) (key second)])
