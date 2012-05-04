@@ -17,7 +17,7 @@
         executor (Executors/newCachedThreadPool)]
     (execute executor #(when-not (.isClosed ds)
                 (try
-                  (let [dp (DatagramPacket. (byte-array 1024) 1024)]
+                  (let [dp (DatagramPacket. (byte-array 100) 100)]
                     (.receive ds dp)
                     (f (decode-f dp)))
                     (catch IOException e))

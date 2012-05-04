@@ -19,6 +19,10 @@ metric_name:123|v
 ```
 The string should be encoded with UTF-8.
 
+### Load testing
+There is a JMeter load-test script called load-test.jmx in the project root,
+it requires the plugins from http://code.google.com/p/jmeter-plugins/ for load testing the UDP receiving parts.
+Seems to manage about 20000 incoming UDP messages on my Core2 Duo MacBook pro right now.
 
 ## TODO
 * Docs on message format
@@ -26,6 +30,7 @@ The string should be encoded with UTF-8.
 * Storage (MongoDB or some circular buffer thing)
 * Graph configuration parts
 * Drop the message type?
+* Load test
 
 ## License
 
