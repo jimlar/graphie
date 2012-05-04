@@ -17,7 +17,7 @@ Goto http://localhost:8080/
 ```
 metric_name:123|v
 ```
-The string should be encoded with UTF-8.
+The string should be encoded with UTF-8. The max length of the message (after UTF-8 encoding) is 100 bytes.
 
 ### Load testing
 There is a JMeter load-test script called load-test.jmx in the project root,
