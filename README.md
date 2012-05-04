@@ -25,9 +25,9 @@ it requires the plugins from http://code.google.com/p/jmeter-plugins/ for load t
 Seems to manage about 20000 incoming UDP messages on my Core2 Duo MacBook pro right now.
 
 ## TODO
-* Storage (MongoDB or some circular buffer thing)
 * Graph configuration parts
 * Drop the message type?
+* Periodic cleanup of seconds (if input stops)
 
 ## License
 

@@ -2,7 +2,7 @@
   (:require
     [clojure.string :as string]
     [noir.response :as response]
-    [graphie.stats :as stats])
+    [graphie.storage :as storage])
   (:use noir.core
         hiccup.core
         hiccup.page-helpers))
@@ -30,10 +30,10 @@
   (string/capitalize (string/replace (string/replace (str name) ":" "" ) "_" " ")))
 
 (defn- data-set [name]
-  (let [values (stats/seconds name)
+  (let [values (storage/seconds name)
         pretty-name (pretty name)]
     [
-      {:label (str pretty-name " average") :data (map (partial point-for-key :avg) values)}
+      {:label (str pretty-name " average") :data (map (partial point-for-key :average) values)}
       {:label (str pretty-name " sum") :data (map (partial point-for-key :sum) values)}
       {:label (str pretty-name " max") :data (map (partial point-for-key :max) values)}
       {:label (str pretty-name " min") :data (map (partial point-for-key :min) values)}
@@ -41,4 +41,4 @@
     ]))
 
 (defpage "/data.json" {}
-  (response/json (reduce concat (map data-set (stats/names)))))
+  (response/json (reduce concat (map data-set (storage/names)))))

@@ -1,31 +1,24 @@
 (ns
   graphie.stats
   (:require [graphie.time :as time]
+            [graphie.storage :as storage]
             [clojure.contrib.math :as math]))
 
 (defonce ^:private stats-agent (agent {}))
 
-(defn names []
-  (keys @stats-agent))
-
-(defn seconds [name]
-  (:secs (name @stats-agent)))
-
 (defn- second-summary [values second]
   (let [sum (reduce + values)]
     {:second second
-     :avg (long (math/round (/ sum (count values))))
+     :average (long (math/round (/ sum (count values))))
      :sum sum
      :max (reduce max values)
      :min (reduce min values)
      :samples (count values)}))
 
-(defn- start-second [stats value time]
-  (merge
-    (if (contains? stats :in)
-      (assoc stats :secs (conj (get stats :secs []) (second-summary (:in stats) (:second stats))))
-      {})
-    {:in [value], :second (time/as-seconds time)}))
+(defn- start-second [key stats value time]
+  (if (contains? stats :in)
+    (storage/store key (second-summary (:in stats) (:second stats))))
+  {:in [value], :second (time/as-seconds time)})
 
 (defn- add-value [stats value]
   (assoc stats :in (conj (get stats :in []) value)))
@@ -39,7 +32,7 @@
     (assoc data key
       (if (same-second? message stats)
         (add-value stats (:value message))
-        (start-second stats (:value message) (:time message))))))
+        (start-second key stats (:value message) (:time message))))))
 
 (defn record-stats [message]
   (if (= "v" (:type message))
