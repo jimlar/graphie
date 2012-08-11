@@ -33,6 +33,10 @@
   (decode-packet "request_time:320|")
   => nil)
 
+(fact "A garbage message gives nil message"
+  (decode-packet "garbage")
+  => nil)
+
 (fact "An empty message gives nil message"
   (decode-packet "")
   => nil)
