@@ -1,7 +1,6 @@
 (defproject graphie "0.1.0-SNAPSHOT"
             :description "Small statistics server"
             :dependencies [[org.clojure/clojure "1.5.0"]
-                           [org.clojure/clojure-contrib "1.2.0"]
                            [compojure "1.1.5"]
                            [hiccup "1.0.2"]
                            [clj-json "0.4.3"]

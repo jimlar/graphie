@@ -1,15 +1,14 @@
 (ns
   graphie.stats
   (:require [graphie.time :as time]
-            [graphie.storage :as storage]
-            [clojure.contrib.math :as math]))
+            [graphie.storage :as storage]))
 
 (defonce ^:private stats-agent (agent {}))
 
 (defn- second-summary [values second]
   (let [sum (reduce + values)]
     {:second second
-     :average (long (math/round (/ sum (count values))))
+     :average (long (Math/round (double (/ sum (count values)))))
      :sum sum
      :max (reduce max values)
      :min (reduce min values)

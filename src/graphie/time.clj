@@ -1,6 +1,5 @@
 (ns
-  graphie.time
-  (:require [clojure.contrib.math :as math]))
+  graphie.time)
 
 (defn stamp []
   (System/currentTimeMillis))
