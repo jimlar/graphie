@@ -8,3 +8,4 @@
 /.lein-failures
 /.lein-plugins
 /graphie.sublime-workspace
+/.lein-repl-history

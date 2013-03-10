@@ -7,18 +7,24 @@
         hiccup.core
         hiccup.page-helpers))
 
-(defpartial layout [& content]
-  (html5
-    [:head [:title "graphie"]
-       (include-css "/css/reset.css")
-       (include-js "/js/jquery.min.js")
-       (include-js "/js/jquery.flot.min.js")
-       (include-js "/js/graphie.js")
-     ]
-    [:body [:div#wrapper content]]))
+(defpartial layout [theme & content]
+  (let [theme (if (empty? theme) "spacelab" theme)]
+    (html5
+      [:head
+        [:title "graphie"]
+        (include-css "/css/reset.css")
+        (include-css (str "/bootstrap/themes/" theme "/bootstrap.min.css"))]
+      [:body
+        [:div#wrapper content]
+        (include-js "/js/jquery.min.js")
+        (include-js "/js/jquery.flot.min.js")
+        (include-js "/bootstrap/js/bootstrap.js")
+        (include-js "/js/graphie.js")
+      ])))
 
-(defpage "/" {}
+(defpage "/" {:keys [theme]}
   (layout
+    theme
     [:h1 "Welcome to graphie"]
     [:h2 "Current data"]
     [:div#placeholder {:style "width:1024px;height:600px;"}]))
