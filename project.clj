@@ -5,7 +5,7 @@
                            [compojure "1.1.5"]
                            [hiccup "1.0.2"]
                            [clj-json "0.5.3"]
-                           [com.novemberain/monger "1.0.0-beta5"]]
+                           [com.novemberain/monger "1.4.2"]]
             :plugins [[lein-ring "0.8.2"]]
             :ring {
               :init graphie.main/init
