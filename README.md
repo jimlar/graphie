@@ -22,7 +22,7 @@ The string should be encoded with UTF-8. The max length of the message (after UT
 ### Load testing
 There is a JMeter load-test script called load-test.jmx in the project root,
 it requires the plugins from http://code.google.com/p/jmeter-plugins/ for load testing the UDP receiving parts.
-Seems to manage about 20000 incoming UDP messages on my Core2 Duo MacBook pro right now.
+Seems to manage about 80000 incoming UDP messages on my i7 Lenovo X230 right now.
 
 ## TODO
 * Websockets for the live graph

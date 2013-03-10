@@ -13,11 +13,11 @@
     <hashTree>
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
-          <collectionProp name="-1482846721">
-            <stringProp name="49586">200</stringProp>
+          <collectionProp name="791929400">
+            <stringProp name="52469">500</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="1567">10</stringProp>
-            <stringProp name="48687">120</stringProp>
+            <stringProp name="1629">30</stringProp>
             <stringProp name="10">10</stringProp>
           </collectionProp>
         </collectionProp>
@@ -46,8 +46,8 @@
           <stringProp name="encodeclass"></stringProp>
         </kg.apc.jmeter.samplers.UDPSampler>
         <hashTree/>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="10ms sleep" enabled="true">
-          <stringProp name="ConstantTimer.delay">10</stringProp>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="1ms sleep" enabled="true">
+          <stringProp name="ConstantTimer.delay">1</stringProp>
         </ConstantTimer>
         <hashTree/>
       </hashTree>
@@ -85,7 +85,7 @@
         <boolProp name="graph_aggregated">false</boolProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="kg.apc.jmeter.vizualizers.ResponseTimesOverTimeGui" testclass="ResultCollector" testname="UDP Response Times" enabled="true">
+      <ResultCollector guiclass="kg.apc.jmeter.vizualizers.ResponseTimesOverTimeGui" testclass="ResultCollector" testname="UDP Response Times" enabled="false">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
