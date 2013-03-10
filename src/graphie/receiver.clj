@@ -1,7 +1,9 @@
 (ns
   graphie.receiver
   (:require [clojure.string :as string]
-            [graphie.udp :as udp]
+            [aleph.udp :as aleph]
+            [lamina.core :as lamina]
+            [gloss.core :as gloss]
             [graphie.time :as time]
             [graphie.stats :as stats]))
 
@@ -28,7 +30,9 @@
     nil))
 
 (defn start [port stats-engine]
-  (udp/start-server port (partial receive stats-engine) (partial udp/packet-to-string "utf-8")))
+  (let [server (aleph/udp-socket {:port port :frame (gloss/string :utf-8)})]
+    (lamina/receive-all @server #(receive stats-engine (:message %1)))
+    server))
 
 (defn stop [server]
-  (udp/stop-server server))
+  (lamina/close server))
