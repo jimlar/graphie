@@ -11,7 +11,7 @@ lein run
 ```
 
 ### Open UI
-Goto http://localhost:8080/
+Goto http://localhost:3000/
 
 ### Open a connection to the UDP socket (ie. port 7890) and send messages on this format:
 ```
