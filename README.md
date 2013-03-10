@@ -30,6 +30,7 @@ Seems to manage about 20000 incoming UDP messages on my Core2 Duo MacBook pro ri
 * Graph configuration parts
 * Drop the message type?
 * Periodic cleanup of seconds (if input stops)
+* Use D3 for the graphing instead
 
 ## License
 
