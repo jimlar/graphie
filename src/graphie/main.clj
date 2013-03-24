@@ -8,6 +8,7 @@
             [clojure.string :as string]
             [graphie.receiver :as receiver]
             [graphie.stats :as stats]
+            [graphie.time :as time]
             [graphie.storage :as storage]))
 
 (defhtml layout [theme & content]
@@ -16,9 +17,11 @@
       [:head
        [:title "graphie"]
        (include-css "/css/reset.css")
-       (include-css (str "/bootstrap/themes/" theme "/bootstrap.min.css"))]
+       (include-css (str "/bootstrap/themes/" theme "/bootstrap.min.css"))
+       (include-css "/css/graphie.css")]
       [:body
        [:div#wrapper content]
+       (include-js "http://d3js.org/d3.v2.min.js?2.8.1")
        (include-js "/js/jquery.min.js")
        (include-js "/js/jquery.flot.min.js")
        (include-js "/bootstrap/js/bootstrap.js")
@@ -29,33 +32,37 @@
   (layout
     theme
     [:h1 "Welcome to graphie"]
-    [:h2 "Current data"]
-    [:div#placeholder {:style "width:1024px;height:600px;"}]))
+    [:h2 "Current data"]))
 
 (defn- point-for-key [key second]
-  [(* (:second second) 1000) (key second)])
+  {:s (:second second) :v (key second)})
 
 (defn- pretty [name]
   (string/capitalize (string/replace (string/replace (str name) ":" "" ) "_" " ")))
 
-(defn- data-set [name]
-  (let [values (storage/seconds name)
-        pretty-name (pretty name)]
-    [
-      {:label (str pretty-name " average") :data (map (partial point-for-key :average) values)}
-      {:label (str pretty-name " sum") :data (map (partial point-for-key :sum) values)}
-      {:label (str pretty-name " max") :data (map (partial point-for-key :max) values)}
-      {:label (str pretty-name " min") :data (map (partial point-for-key :min) values)}
-      {:label (str pretty-name " #samples") :data (map (partial point-for-key :samples) values)}
-      ]))
+(defn- data-set [metric start-second end-second]
+  (let [values (storage/values metric start-second end-second)
+        pretty-name (pretty metric)]
+    (apply
+      merge
+      (map
+        (fn [key] { key { :label (name key) :data (map (partial point-for-key key) values)}})
+        [:average :sum :max :min :samples]))))
 
-(defn graph-data []
+(defn graph-data [seconds-back]
   {:headers {"Content-Type" "application/json"}
-    :body (json/generate-string (reduce concat (map data-set (storage/names))))})
+    :body
+      (let [end-second (time/as-seconds (time/stamp))
+            start-second (- end-second seconds-back)]
+        (json/generate-string
+          (apply
+            merge
+            (for [metric (storage/names)]
+              {metric (assoc (data-set metric start-second end-second) :label (pretty metric))}))))})
 
 (defroutes app-routes
   (GET "/" [theme] (index theme))
-  (GET "/data.json" [] (graph-data))
+  (GET "/data.json" [] (graph-data 120))
   (route/resources "/")
   (route/not-found "Not Found"))
 

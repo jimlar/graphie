@@ -11,7 +11,7 @@
     (.startsWith name "system.")
     (.startsWith name "fs.")))
 
-  (defn coll-name [metric]
+(defn coll-name [metric]
   (subs (str metric) 1))
 
 (defn metric-name [collection]
@@ -23,6 +23,17 @@
 (defn names []
   (map metric-name (filter #(not (system-coll? %)) (db/get-collection-names))))
 
-(defn seconds [metric]
-  (mc/find-maps (coll-name metric)))
+(defn- second-indexed-hash [values]
+  (reduce
+    #(assoc %1 (:second %2) %2)
+    {}
+    values))
 
+(defn- fill-with-blanks [start end values]
+  (let [seconds (second-indexed-hash values)]
+    (map
+      #(get seconds % {:second % :average 0 :sum 0 :max 0 :min 0 :samples 0})
+      (range start end))))
+
+(defn values [name start-second end-second]
+  (fill-with-blanks start-second end-second (mc/find-maps (coll-name name) {:second {"$gte" start-second "$lt" end-second}})))
