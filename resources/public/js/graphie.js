@@ -18,8 +18,8 @@ $(function () {
         .x(function(d, i) { return x(now - (n - 1 - i) * duration); })
         .y(function(d, i) { return y(d.v); });
 
-    var svg = d3.select("body").append("p").append("svg")
-        .attr("width", width)
+    var svg = d3.select("#graphs").append("p").append("svg")
+        .attr("width", width + margin_bottom)
         .attr("height", height + margin_bottom)
 
     svg.append("defs").append("clipPath")

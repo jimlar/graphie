@@ -20,7 +20,11 @@
        (include-css (str "/bootstrap/themes/" theme "/bootstrap.min.css"))
        (include-css "/css/graphie.css")]
       [:body
-       [:div#wrapper content]
+       [:div.container-fluid
+        [:div.row-fluid
+          [:div.span1]
+          [:div.span10 content]
+          [:div.span1]]]
        (include-js "http://d3js.org/d3.v2.min.js?2.8.1")
        (include-js "/js/jquery.min.js")
        (include-js "/bootstrap/js/bootstrap.js")
@@ -31,7 +35,7 @@
   (layout
     theme
     [:h1 "Welcome to graphie"]
-    [:h2 "Current data"]))
+    [:div#graphs]))
 
 (defn- point-for-key [key second]
   {:s (:second second) :v (key second)})
