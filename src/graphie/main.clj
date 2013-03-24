@@ -23,7 +23,6 @@
        [:div#wrapper content]
        (include-js "http://d3js.org/d3.v2.min.js?2.8.1")
        (include-js "/js/jquery.min.js")
-       (include-js "/js/jquery.flot.min.js")
        (include-js "/bootstrap/js/bootstrap.js")
        (include-js "/js/graphie.js")
        ])))

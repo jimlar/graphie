@@ -1,5 +1,4 @@
 $(function () {
-
     var n = 120,
         duration = 1000,
         now = new Date(Date.now() - duration)
@@ -66,7 +65,6 @@ $(function () {
                 .duration(duration)
                 .ease("linear")
                 .attr("transform", "translate(" + x(now - (n - 1) * duration) + ")")
-
         }
 
         $.ajax({
